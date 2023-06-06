@@ -36,15 +36,20 @@ namespace ProtectYourUSB
             this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
-            this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
-            this.btnSubmit = new System.Windows.Forms.Button();
-            this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
-            this.metroComboBox1 = new MetroFramework.Controls.MetroComboBox();
-            this.button2 = new System.Windows.Forms.Button();
             this.lbNotiLock = new System.Windows.Forms.Label();
+            this.btnSubmit = new System.Windows.Forms.Button();
+            this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.btnShow = new System.Windows.Forms.Button();
+            this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
+            this.cbListDisk1 = new MetroFramework.Controls.MetroComboBox();
+            this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
             this.metroTabPage2.SuspendLayout();
+            this.metroTabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // metroLabel1
@@ -86,14 +91,15 @@ namespace ProtectYourUSB
             this.metroLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.metroLabel3.Location = new System.Drawing.Point(385, 40);
             this.metroLabel3.Name = "metroLabel3";
-            this.metroLabel3.Size = new System.Drawing.Size(149, 17);
+            this.metroLabel3.Size = new System.Drawing.Size(136, 17);
             this.metroLabel3.TabIndex = 5;
-            this.metroLabel3.Text = "Một sản phẩm của CTKđz";
+            this.metroLabel3.Text = "Một sản phẩm của CTK";
             // 
             // metroTabControl1
             // 
             this.metroTabControl1.Controls.Add(this.metroTabPage1);
             this.metroTabControl1.Controls.Add(this.metroTabPage2);
+            this.metroTabControl1.Controls.Add(this.metroTabPage3);
             this.metroTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.metroTabControl1.Location = new System.Drawing.Point(20, 60);
             this.metroTabControl1.Name = "metroTabControl1";
@@ -116,18 +122,16 @@ namespace ProtectYourUSB
             this.metroTabPage1.Text = "Protect USB";
             this.metroTabPage1.VerticalScrollbarBarColor = true;
             // 
-            // metroTabPage2
+            // lbNotiLock
             // 
-            this.metroTabPage2.Controls.Add(this.button2);
-            this.metroTabPage2.Controls.Add(this.metroLabel4);
-            this.metroTabPage2.Controls.Add(this.metroComboBox1);
-            this.metroTabPage2.HorizontalScrollbarBarColor = true;
-            this.metroTabPage2.Location = new System.Drawing.Point(4, 39);
-            this.metroTabPage2.Name = "metroTabPage2";
-            this.metroTabPage2.Size = new System.Drawing.Size(548, 284);
-            this.metroTabPage2.TabIndex = 1;
-            this.metroTabPage2.Text = "Hiện file ẩn";
-            this.metroTabPage2.VerticalScrollbarBarColor = true;
+            this.lbNotiLock.AutoSize = true;
+            this.lbNotiLock.BackColor = System.Drawing.Color.Transparent;
+            this.lbNotiLock.ForeColor = System.Drawing.Color.Red;
+            this.lbNotiLock.Location = new System.Drawing.Point(148, 119);
+            this.lbNotiLock.Name = "lbNotiLock";
+            this.lbNotiLock.Size = new System.Drawing.Size(13, 17);
+            this.lbNotiLock.TabIndex = 7;
+            this.lbNotiLock.Text = "*";
             // 
             // btnSubmit
             // 
@@ -140,6 +144,30 @@ namespace ProtectYourUSB
             this.btnSubmit.UseVisualStyleBackColor = true;
             this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
             // 
+            // metroTabPage2
+            // 
+            this.metroTabPage2.Controls.Add(this.btnShow);
+            this.metroTabPage2.Controls.Add(this.metroLabel4);
+            this.metroTabPage2.Controls.Add(this.cbListDisk1);
+            this.metroTabPage2.HorizontalScrollbarBarColor = true;
+            this.metroTabPage2.Location = new System.Drawing.Point(4, 39);
+            this.metroTabPage2.Name = "metroTabPage2";
+            this.metroTabPage2.Size = new System.Drawing.Size(548, 284);
+            this.metroTabPage2.TabIndex = 1;
+            this.metroTabPage2.Text = "Hiện file ẩn";
+            this.metroTabPage2.VerticalScrollbarBarColor = true;
+            // 
+            // btnShow
+            // 
+            this.btnShow.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnShow.Location = new System.Drawing.Point(192, 143);
+            this.btnShow.Name = "btnShow";
+            this.btnShow.Size = new System.Drawing.Size(127, 35);
+            this.btnShow.TabIndex = 5;
+            this.btnShow.Text = "Show";
+            this.btnShow.UseVisualStyleBackColor = true;
+            this.btnShow.Click += new System.EventHandler(this.btnShow_Click);
+            // 
             // metroLabel4
             // 
             this.metroLabel4.AutoSize = true;
@@ -150,35 +178,55 @@ namespace ProtectYourUSB
             this.metroLabel4.TabIndex = 2;
             this.metroLabel4.Text = "Select USB";
             // 
-            // metroComboBox1
+            // cbListDisk1
             // 
-            this.metroComboBox1.FormattingEnabled = true;
-            this.metroComboBox1.ItemHeight = 24;
-            this.metroComboBox1.Location = new System.Drawing.Point(192, 78);
-            this.metroComboBox1.Name = "metroComboBox1";
-            this.metroComboBox1.Size = new System.Drawing.Size(127, 30);
-            this.metroComboBox1.TabIndex = 3;
+            this.cbListDisk1.FormattingEnabled = true;
+            this.cbListDisk1.ItemHeight = 24;
+            this.cbListDisk1.Location = new System.Drawing.Point(192, 78);
+            this.cbListDisk1.Name = "cbListDisk1";
+            this.cbListDisk1.Size = new System.Drawing.Size(127, 30);
+            this.cbListDisk1.TabIndex = 3;
             // 
-            // button2
+            // metroTabPage3
             // 
-            this.button2.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(192, 143);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(127, 35);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "Show";
-            this.button2.UseVisualStyleBackColor = true;
+            this.metroTabPage3.Controls.Add(this.label3);
+            this.metroTabPage3.Controls.Add(this.label2);
+            this.metroTabPage3.Controls.Add(this.label1);
+            this.metroTabPage3.HorizontalScrollbarBarColor = true;
+            this.metroTabPage3.Location = new System.Drawing.Point(4, 39);
+            this.metroTabPage3.Name = "metroTabPage3";
+            this.metroTabPage3.Size = new System.Drawing.Size(548, 284);
+            this.metroTabPage3.TabIndex = 2;
+            this.metroTabPage3.Text = "Thông tin";
+            this.metroTabPage3.VerticalScrollbarBarColor = true;
             // 
-            // lbNotiLock
+            // label1
             // 
-            this.lbNotiLock.AutoSize = true;
-            this.lbNotiLock.BackColor = System.Drawing.Color.Transparent;
-            this.lbNotiLock.ForeColor = System.Drawing.Color.Red;
-            this.lbNotiLock.Location = new System.Drawing.Point(148, 119);
-            this.lbNotiLock.Name = "lbNotiLock";
-            this.lbNotiLock.Size = new System.Drawing.Size(13, 17);
-            this.lbNotiLock.TabIndex = 7;
-            this.lbNotiLock.Text = "*";
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Location = new System.Drawing.Point(3, 17);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(542, 43);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Công cụ tạm khóa USB của bạn tránh Virus shortcut ẩn, thay đổi dữ liệu trong USB " +
+    "của bạn khi cắm USB ở các máy tính chùa như quán photo, tiệm net";
+            // 
+            // label2
+            // 
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.Location = new System.Drawing.Point(3, 80);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(542, 43);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Author: Chu Tuan Kiet";
+            // 
+            // label3
+            // 
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.Location = new System.Drawing.Point(3, 139);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(542, 43);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Github: kimstars";
             // 
             // Form1
             // 
@@ -196,6 +244,7 @@ namespace ProtectYourUSB
             this.metroTabPage1.PerformLayout();
             this.metroTabPage2.ResumeLayout(false);
             this.metroTabPage2.PerformLayout();
+            this.metroTabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -211,10 +260,14 @@ namespace ProtectYourUSB
         private MetroFramework.Controls.MetroTabPage metroTabPage1;
         private MetroFramework.Controls.MetroTabPage metroTabPage2;
         private System.Windows.Forms.Button btnSubmit;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnShow;
         private MetroFramework.Controls.MetroLabel metroLabel4;
-        private MetroFramework.Controls.MetroComboBox metroComboBox1;
+        private MetroFramework.Controls.MetroComboBox cbListDisk1;
         private System.Windows.Forms.Label lbNotiLock;
+        private MetroFramework.Controls.MetroTabPage metroTabPage3;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
     }
 }
 

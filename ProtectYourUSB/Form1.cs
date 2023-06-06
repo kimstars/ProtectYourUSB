@@ -15,7 +15,7 @@ namespace ProtectYourUSB
         {
             InitializeComponent();
         }
-        bool isLock = false;
+      
         private void Form1_Load(object sender, EventArgs e)
         {
             foreach (DriveInfo drive in DriveInfo.GetDrives())
@@ -24,6 +24,7 @@ namespace ProtectYourUSB
                 {
                     //MessageBox.Show(drive.Name);
                     cbListDisk.Items.Add(drive.Name);
+                    cbListDisk1.Items.Add(drive.Name);
                 }
             }
 
@@ -129,6 +130,20 @@ namespace ProtectYourUSB
             checkstatus(drivePath);
 
  
+        }
+
+        private void btnShow_Click(object sender, EventArgs e)
+        {
+            string driveLetter = "";
+            if (cbListDisk1.Text != "")
+            {
+                driveLetter = cbListDisk1.Text;
+            }
+
+            string drivePath = $"{driveLetter}";
+            runps($"attrib -s -h -r /s /d {drivePath}*. ");
+            MessageBox.Show("Done");
+
         }
     }
 }
