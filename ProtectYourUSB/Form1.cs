@@ -82,10 +82,6 @@ namespace ProtectYourUSB
             // Chờ quy trình kết thúc
             process.WaitForExit();
 
-            // In kết quả và lỗi (nếu có)
-            Console.WriteLine("Kết quả:");
-            Console.WriteLine(error);
-
         }
 
         void checkstatus(string drivePath)
@@ -132,9 +128,7 @@ namespace ProtectYourUSB
 
             checkstatus(drivePath);
 
-
-
-            //MessageBox.Show(isReadOnly.ToString());
+ 
         }
     }
 }

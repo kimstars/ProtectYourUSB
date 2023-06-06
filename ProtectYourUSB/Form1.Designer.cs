@@ -29,6 +29,7 @@ namespace ProtectYourUSB
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.cbListDisk = new MetroFramework.Controls.MetroComboBox();
             this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
@@ -163,7 +164,7 @@ namespace ProtectYourUSB
             this.button2.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.Location = new System.Drawing.Point(192, 143);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(127, 30);
+            this.button2.Size = new System.Drawing.Size(127, 35);
             this.button2.TabIndex = 5;
             this.button2.Text = "Show";
             this.button2.UseVisualStyleBackColor = true;
@@ -186,6 +187,7 @@ namespace ProtectYourUSB
             this.ClientSize = new System.Drawing.Size(596, 407);
             this.Controls.Add(this.metroTabControl1);
             this.Controls.Add(this.metroLabel3);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "CTK TOOL";
             this.Load += new System.EventHandler(this.Form1_Load);
