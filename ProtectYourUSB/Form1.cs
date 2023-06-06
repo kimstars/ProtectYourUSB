@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,9 +17,10 @@ namespace ProtectYourUSB
         {
             InitializeComponent();
         }
-      
-        private void Form1_Load(object sender, EventArgs e)
+        void LoadDisk()
         {
+            cbListDisk.Items.Clear();
+            cbListDisk1.Items.Clear();
             foreach (DriveInfo drive in DriveInfo.GetDrives())
             {
                 if (drive.DriveType == DriveType.Removable)
@@ -27,6 +30,11 @@ namespace ProtectYourUSB
                     cbListDisk1.Items.Add(drive.Name);
                 }
             }
+
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            LoadDisk();
 
 
 
@@ -40,19 +48,36 @@ namespace ProtectYourUSB
             {
                 driveLetter = cbListDisk.Text;
             }
+
            
             string drivePath = $"{driveLetter}";
-            if(status == "Unlocked")
+
+            DirectoryInfo directoryInfo = new DirectoryInfo(drivePath);
+            DirectorySecurity accessControl = directoryInfo.GetAccessControl();
+
+
+
+            if (status == "Unlocked")
             {
-                // Đặt thuộc tính chỉ đọc cho ổ đĩa
-                //File.SetAttributes(drivePath, File.GetAttributes(drivePath) | FileAttributes.ReadOnly);
-                runps($"get-disk -Number (Get-Partition -DriveLetter {drivePath[0]}).disknumber | Set-Disk -IsReadOnly 1");
+                accessControl.SetAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.Read, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                directoryInfo.SetAccessControl(accessControl);
+
                 btnSubmit.Text = "Locked";
             }
             else
             {
-                //File.SetAttributes(drivePath, File.GetAttributes(drivePath) & ~FileAttributes.ReadOnly);
-                runps($"get-disk -Number (Get-Partition -DriveLetter {drivePath[0]}).disknumber | Set-Disk -IsReadOnly 0");
+                DirectoryInfo directoryInfo2 = new DirectoryInfo(drivePath);
+                DirectorySecurity accessControl2 = directoryInfo.GetAccessControl();
+                accessControl2.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.ReadData, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                accessControl2.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.ReadAttributes, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                accessControl2.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.ReadExtendedAttributes, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                accessControl2.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.WriteData, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                accessControl2.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.AppendData, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                accessControl2.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.WriteAttributes, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                accessControl2.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.WriteExtendedAttributes, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                accessControl2.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.DeleteSubdirectoriesAndFiles, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                accessControl2.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.ReadPermissions, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow));
+                directoryInfo2.SetAccessControl(accessControl2);
 
                 btnSubmit.Text = "Unlocked";
 
@@ -87,29 +112,50 @@ namespace ProtectYourUSB
 
         void checkstatus(string drivePath)
         {
-            bool isReadOnly = false;
-            bool shouldDelete = true;
+            bool fullcontrol, modify, readX, listfolder, read, write;
+            fullcontrol = modify = readX = listfolder = read = write = false;
+            string status = "";
 
-            try
+            DriveInfo driveInfo = new DriveInfo(drivePath);
+            AuthorizationRuleCollection accessRules = driveInfo.RootDirectory.GetAccessControl().GetAccessRules(true, true, typeof(SecurityIdentifier));
+
+            foreach (FileSystemAccessRule rule in accessRules)
             {
-                System.IO.Directory.CreateDirectory(drivePath + "test");
-                shouldDelete = true;
+                if (rule.IdentityReference.Value.ToString() == "S-1-1-0")
+                {
+                    if (rule.AccessControlType == AccessControlType.Allow)
+                    {
+                        if ((rule.FileSystemRights & FileSystemRights.FullControl) == FileSystemRights.FullControl)
+                        {
+                            fullcontrol = true;
+                            break;
+                        }
 
+                        if ((rule.FileSystemRights & FileSystemRights.Modify) == FileSystemRights.Modify)
+                        {
+                            modify = true;
+                        }
+
+                        if ((rule.FileSystemRights & FileSystemRights.ReadAndExecute) == FileSystemRights.ReadAndExecute)
+                        {
+                            readX = true;
+                        }
+
+                        
+                        if ((rule.FileSystemRights & FileSystemRights.Read) == FileSystemRights.Read)
+                        {
+                            read = true;
+                        }
+
+                        if ((rule.FileSystemRights & FileSystemRights.Write) == FileSystemRights.Write)
+                        {
+                            write = true;
+                        }
+                    }
+                }
             }
-            catch (IOException ex)
-            {
-                //read-only
-                isReadOnly = true;
-                shouldDelete = false;
 
-            }
-
-            if (shouldDelete)
-            {
-                System.IO.Directory.Delete(drivePath + "test");
-            }
-
-            if (!isReadOnly)
+            if (fullcontrol || modify||readX|| write)
             {
                 lbNotiLock.Text = "Unlocked";
                 btnSubmit.Text = "Lock";
@@ -118,8 +164,24 @@ namespace ProtectYourUSB
             {
                 lbNotiLock.Text = "Locked";
                 btnSubmit.Text = "Unlock";
+            }
+
+            if (fullcontrol)
+            {
+                lbnotiPer.Text = "FullControl";
+            }
+            else if (write&&read)
+            {
+                lbnotiPer.Text = "Write||Read";
+            }else if (read)
+            {
+                lbnotiPer.Text = "ReadOnly";
 
             }
+
+            //string userName = Environment.UserName;
+            //MessageBox.Show(userName);
+
 
         }
         private void cbListDisk_SelectedIndexChanged(object sender, EventArgs e)
@@ -143,6 +205,12 @@ namespace ProtectYourUSB
             string drivePath = $"{driveLetter}";
             runps($"attrib -s -h -r /s /d {drivePath}*. ");
             MessageBox.Show("Done");
+
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            LoadDisk();
 
         }
     }
